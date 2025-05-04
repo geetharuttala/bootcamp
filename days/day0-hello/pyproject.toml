@@ -8,6 +8,9 @@ license = { text = "MIT" }
 authors = [
   { name = "Geetha R", email = "geetharuttala0106@gmail.com" }
 ]
+dependencies = [
+    "rich"
+]
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
@@ -21,6 +24,5 @@ Repository = "https://github.com/geetharuttala/geetha-hello"
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
-
 
 

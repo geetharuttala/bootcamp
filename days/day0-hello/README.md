@@ -1,4 +1,3 @@
-````markdown
 # geetha-hello
 
 > A simple Python package that says hello 👋
@@ -9,8 +8,8 @@
 
 ## ✨ Description
 
-`geetha-hello` is a minimal Python package that provides a friendly greeting.  
-Perfect for testing Python packaging and publishing workflows!
+`geetha-hello` is a minimal Python package that provides a friendly greeting using `rich`.  
+Perfect for testing Python packaging, CLI tools, and publishing workflows!
 
 ---
 
@@ -20,31 +19,46 @@ From **TestPyPI**:
 
 ```bash
 pip install -i https://test.pypi.org/simple/ geetha-hello
-````
+```
 
 ---
 
 ## 🚀 Usage
 
+### 1. As a Python module
+
 ```python
 from geetha_hello.hello import say_hello
 
-print(say_hello())          # Output: Hello, world!
-print(say_hello("Geetha"))  # Output: Hello, Geetha!
+say_hello()           # Output: Hello, World!
+say_hello("Geetha")   # Output: Hello, Geetha!
 ```
+
+### 2. As a CLI script
+
+```bash
+python -m geetha_hello.hello
+# Output: Hello, World!
+
+python -m geetha_hello.hello Geetha
+# Output: Hello, Geetha!
+```
+
+✅ Uses the [rich](https://pypi.org/project/rich/) library to display colored text in the terminal.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-setup/
+geetha-hello/
 ├── src/
 │   └── geetha_hello/
 │       ├── __init__.py
 │       └── hello.py
 ├── pyproject.toml
-└── README.md
+├── README.md
+└── ...
 ```
 
 ---
@@ -65,6 +79,3 @@ setup/
 ## 📝 License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-```
-
