@@ -1,6 +1,6 @@
 [project]
 name = "geetha-hello"
-version = "0.1.1"
+version = "0.1.4"
 description = "A simple package that says hello"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -9,13 +9,17 @@ authors = [
   { name = "Geetha R", email = "geetharuttala0106@gmail.com" }
 ]
 dependencies = [
-    "rich"
+  "rich",
+  "typer"
 ]
 classifiers = [
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent"
 ]
+
+[project.scripts]
+geetha-hello = "geetha_hello.cli:app"
 
 [project.urls]
 Homepage = "https://github.com/geetharuttala/geetha-hello"
