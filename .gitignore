@@ -1,0 +1,11 @@
+# Ignore virtual environments
+.venv/
+
+# Ignore compiled files
+__pycache__/
+*.pyc
+
+# Ignore build artifacts
+*.egg-info/
+dist/
+build/
