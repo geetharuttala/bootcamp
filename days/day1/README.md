@@ -52,9 +52,48 @@ This day focused on building foundational skills in developer documentation, inc
     mkdocs serve -a localhost:8001
     ```
 * Mermaid diagrams didn't render due to plugin issues, so I used exported images instead. 
-* Docs site previewed locally at: https://geethar.mooo.com/docs/
+* Docs site previewed locally at: http://localhost:8000/
 
 ---
+
+## Deployment to GCP Server
+
+To host my MkDocs site at [https://geethar.mooo.com/docs](https://geethar.mooo.com/docs), I followed these steps:
+
+### Build the static site:
+
+```bash
+mkdocs build
+````
+
+This created a `site/` directory with all the HTML files.
+
+### Transfer the site to my GCP VM:
+
+Used PyCharm’s built-in deployment (via SSH interpreter) to upload the `site/` folder contents to `/home/bootcamp/docs`.
+
+### Move files to Apache’s web root:
+
+SSH into the GCP VM as the `geetharuttala0106` user (who has sudo privileges):
+
+```bash
+ssh geetharuttala0106@geethar.mooo.com
+```
+
+Move uploaded files to `/var/www/html/docs/`:
+
+```bash
+sudo mv /home/bootcamp/docs /var/www/html/docs
+```
+
+### Update Home Page:
+
+* Added a styled HTML landing page with my photo and name.
+* Included a link to the docs in homepage:
+ [View Documentation →](https://geethar.mooo.com/docs)
+
+---
+
 
 ## Folder Structure
 
