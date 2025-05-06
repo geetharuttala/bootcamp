@@ -35,7 +35,10 @@ A command-line tool to evaluate password strength using Python, Typer, and Rich.
 
 ## Live Documentation Site
 
-📘 View my MkDocs-powered site for Day 1 documentation:  
+View my live site:  
+[https://geethar.mooo.com](https://geethar.mooo.com/)
+
+View my MkDocs-powered site for Day 1 documentation:  
 [https://geethar.mooo.com/docs/](https://geethar.mooo.com/docs/)
 
 ---
