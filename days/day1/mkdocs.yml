@@ -1,0 +1,18 @@
+site_name: Day 1 Docs
+theme:
+  name: material
+
+plugins:
+  - search
+
+nav:
+  - Home: index.md
+  - Sequence Diagram: sequence.md
+  - Block Diagram: block-diagram.md
+  - Design: design.md
+  - Architecture: architecture.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.details
