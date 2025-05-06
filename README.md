@@ -36,7 +36,7 @@ A command-line tool to evaluate password strength using Python, Typer, and Rich.
 ## Live Documentation Site
 
 📘 View my MkDocs-powered site for Day 1 documentation:  
-[http://127.0.0.1:8000](http://127.0.0.1:8000)
+[https://geethar.mooo.com/docs/](https://geethar.mooo.com/docs/)
 
 ---
 
