@@ -35,7 +35,6 @@ This day focused on building foundational skills in developer documentation, inc
   ```yaml
   nav:
     - Home: index.md
-    - README: readme.md
     - Sequence Diagram: sequence.md
     - Block Diagram: block-diagram.md
     - Design: design.md
@@ -53,7 +52,7 @@ This day focused on building foundational skills in developer documentation, inc
     mkdocs serve -a localhost:8001
     ```
 * Mermaid diagrams didn't render due to plugin issues, so I used exported images instead. 
-* Docs site previewed locally at: http://127.0.0.1:8000/
+* Docs site previewed locally at: https://geethar.mooo.com/docs/
 
 ---
 
