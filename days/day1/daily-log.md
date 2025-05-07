@@ -3,7 +3,7 @@
 ## Table of Contents
 
 * [Day 1 (doctools)](#day-1)
-* [Day 2](#day-2)
+* [Day 2 (pythonic drills & packaging)](#day-2)
 
 ---
 
@@ -54,3 +54,35 @@
   * Set up project with `src/` layout, `pyproject.toml`, and CLI entry point.
   * Wrote detailed `README.md` and created `tests/` folder with test guide.
   * Fixed PyCharm environment sync and shell quoting issues.
+
+---
+
+## Day 2 (pythonic drills & packaging)
+
+### What I Learned
+
+* Pythonic idioms: unpacking, list comprehensions, dictionary merges.
+* Functional tools: lambdas, closures, decorators, `functools`, `itertools`.
+* Standard library usage: `collections`, `pathlib`, `tempfile`, `os`, `shutil`.
+* YAML config loading with fallback logic (current dir → ENV → default file).
+* Used `logging` module and learned how to toggle logs globally and selectively.
+
+### What Confused Me
+
+* Caching issue when running an outdated installed package.
+* Debugging why config values didn't apply — turned out to be a install issue.
+* Remembering to bump version before republishing.
+
+### Summary of Work
+
+* Built `many-hellos` CLI app that depends on the package `geetha-hello`.
+* Added `_config.yaml` fallback logic and verified with:
+  * Current directory
+  * `CONFIG_PATH` env variable
+  * Default file inside module
+* Added logging to both config loader and hello module.
+* Tested logging toggles:
+  * All logs ON
+  * Logs OFF
+  * Selective logs for just config loader
+* Validated results via CLI tests.

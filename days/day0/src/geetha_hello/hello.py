@@ -1,12 +1,11 @@
-from rich import print
 from typing import Optional
+from .config_loader import load_config
 
-def say_hello(name: Optional[str] = None) -> None:
-    """
-    Prints a rich-formatted hello message.
-
-    Args:
-        name (Optional[str]): Name to greet. Defaults to 'World'.
-    """
+def say_hello(name: Optional[str] = None) -> str:
     target = name or "World"
-    print(f"[bold green]Hello, {target}![/bold green]")
+    config = load_config()
+    num_times = config.get("num_times", 1)
+
+    message = f"Hello, {target}!"
+    full_message = "\n".join([message] * num_times)
+    return full_message

@@ -1,6 +1,6 @@
 [project]
 name = "geetha-hello"
-version = "0.1.4"
+version = "0.1.11"
 description = "A simple package that says hello"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -28,5 +28,12 @@ Repository = "https://github.com/geetharuttala/geetha-hello"
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+geetha_hello = ["_config.yaml"]
+
 
 
