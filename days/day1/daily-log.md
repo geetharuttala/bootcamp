@@ -3,7 +3,7 @@
 ## Table of Contents
 
 * [Day 1 (doctools)](#day-1)
-* [Day 2 (pythonic drills & packaging)](#day-2-)
+* [Day 2 (pythonic drills & packaging)](#day-2)
 
 ---
 
@@ -57,7 +57,7 @@
 
 ---
 
-## Day 2 
+## Day 2 (pythonic drills & packaging)
 
 ### What I Learned
 
