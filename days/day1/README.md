@@ -56,7 +56,57 @@ This day focused on building foundational skills in developer documentation, inc
 
 ---
 
-## Deployment to GCP Server
+## Deployment to GCP Server via PyCharm Community Edition
+
+To host my MkDocs site at [https://geethar.mooo.com/docs](https://geethar.mooo.com/docs), I followed these steps:
+
+### 1. Build the static site:
+
+Inside the MkDocs project directory, run:
+
+```bash
+mkdocs build
+```
+
+This generates a `site/` folder containing the static HTML files.
+
+---
+
+### 2. Transfer the site to the GCP server (using terminal, not PyCharm):
+
+Since PyCharm Community Edition doesn't support remote deployment or SSH interpreters, I used `scp` to upload the files:
+
+```bash
+scp -r site/ geetharuttala0106@geethar.mooo.com:/home/geetharuttala0106/
+```
+
+---
+
+### 3. Move files to Apache’s web root:
+
+SSH into the server:
+
+```bash
+ssh geetharuttala0106@geethar.mooo.com
+```
+
+Then move the uploaded site to the site location:
+
+```bash
+sudo mkdir -p /var/www/html/docs
+sudo mv ~/site /var/www/html/docs
+```
+
+---
+
+Now, the site is accessible at:
+[https://geethar.mooo.com/docs](https://geethar.mooo.com/docs)
+
+---
+
+
+
+## Deployment to GCP Server via PyCharm Professional version
 
 To host my MkDocs site at [https://geethar.mooo.com/docs](https://geethar.mooo.com/docs), I followed these steps:
 
