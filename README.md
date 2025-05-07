@@ -50,7 +50,7 @@ A modular `say_hello` Python package published to TestPyPI and reused in another
 View my live site:  
 [https://geethar.mooo.com](https://geethar.mooo.com/)
 
-View my MkDocs-powered site for Day 1 documentation:  
+View my MkDocs-powered site for Password Strength Checker documentation:  
 [https://geethar.mooo.com/docs/](https://geethar.mooo.com/docs/)
 
 ---
