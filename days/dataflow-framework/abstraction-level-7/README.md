@@ -136,3 +136,33 @@ http://localhost:8000/errors
 * Metrics and traces are shared via thread-safe stores (`MetricsStore`, `TraceStore`)
 * Errors are logged with timestamps and returned as structured JSON
 
+
+## Folder Structure
+
+```
+
+abstraction-level-7/
+├── cli.py
+├── main.py
+├── config/
+│   └── pipeline.yaml
+├── input.txt
+├── processors/
+│   ├── __init__.py
+│   ├── filters.py
+│   ├── formatters.py
+│   ├── output.py
+│   └── start.py
+├── dashboard/
+│   ├── __init__.py
+│   └── server.py
+├── utils/
+│   ├── metrics.py
+│   └── tracing.py
+├── README.md
+├── requirements.txt
+
+````
+
+
+
