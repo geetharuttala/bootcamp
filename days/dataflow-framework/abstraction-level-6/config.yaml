@@ -1,0 +1,25 @@
+nodes:
+  - tag: start
+    type: ab6.processors.start.tag_lines
+  - tag: error
+    type: ab6.processors.filters.only_error
+  - tag: warn
+    type: ab6.processors.filters.only_warn
+  - tag: general
+    type: ab6.processors.formatters.snakecase
+  - tag: end
+    type: ab6.processors.output.terminal
+
+edges:
+  - from: start
+    to: error
+  - from: start
+    to: warn
+  - from: start
+    to: general
+  - from: error
+    to: end
+  - from: warn
+    to: end
+  - from: general
+    to: end
