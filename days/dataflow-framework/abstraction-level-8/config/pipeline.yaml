@@ -1,0 +1,10 @@
+start:
+  next: filter
+
+filter:
+  next: format
+
+format:
+  next: output
+
+output: {}
