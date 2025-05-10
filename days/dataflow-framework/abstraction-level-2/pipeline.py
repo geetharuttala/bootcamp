@@ -1,5 +1,5 @@
-from core import to_uppercase, to_snakecase
-from processor_types import ProcessorFn
+from .core import to_uppercase, to_snakecase
+from .types import ProcessorFn
 from dotenv import load_dotenv
 import os
 

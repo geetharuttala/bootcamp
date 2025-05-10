@@ -1,0 +1,5 @@
+[ERROR] Disk full
+[WARNING] Low memory
+Just a normal message
+Another normal message
+[ERROR] Timeout occurred

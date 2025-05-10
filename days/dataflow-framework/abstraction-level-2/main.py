@@ -2,8 +2,8 @@ from dotenv import load_dotenv
 import os
 from typing import Optional
 
-from pipeline import get_pipeline
-from core import apply_processors
+from .pipeline import get_pipeline
+from .core import apply_processors
 
 load_dotenv()
 
@@ -28,5 +28,5 @@ def run(input_path: str, output_path: Optional[str], mode: Optional[str]):
     write_output(lines, output_path)
 
 if __name__ == "__main__":
-    import cli
+    from . import cli
     cli.app()

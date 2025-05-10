@@ -9,5 +9,5 @@ def process(
     output: Optional[str] = typer.Option(None, "--output", "-o", help="Output file path"),
     mode: Optional[str] = typer.Option(None, "--mode", "-m", help="Processing mode (uppercase or snakecase)")
 ):
-    from main import run
+    from .main import run
     run(input, output, mode)

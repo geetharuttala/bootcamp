@@ -1,4 +1,4 @@
-from processor_types import ProcessorFn
+from .types import ProcessorFn
 
 def to_uppercase(line: str) -> str:
     return line.strip().upper()

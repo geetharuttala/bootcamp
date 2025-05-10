@@ -1,0 +1,60 @@
+entrypoint: trim
+
+nodes:
+  - name: trim
+    type: processors.trim.Trim
+
+  - name: tag
+    type: processors.tagging.TagRouter
+
+  - name: archive
+    type: processors.archiver.Archive
+
+  - name: count
+    type: processors.counter.Count
+
+  - name: tally
+    type: processors.tally.Tally
+
+  - name: format
+    type: processors.formatter.Format
+
+  - name: printer
+    type: processors.printer.Printer
+
+routes:
+  - from: trim
+    tag: main
+    to: tag
+
+  - from: tag
+    tag: errors
+    to: count
+
+  - from: tag
+    tag: errors
+    to: archive
+
+  - from: tag
+    tag: warnings
+    to: tally
+
+  - from: tag
+    tag: general
+    to: format
+
+  - from: format
+    tag: formatted
+    to: printer
+
+  - from: count
+    tag: counted
+    to: printer
+
+  - from: archive
+    tag: archived
+    to: printer
+
+  - from: tally
+    tag: formatted
+    to: printer
