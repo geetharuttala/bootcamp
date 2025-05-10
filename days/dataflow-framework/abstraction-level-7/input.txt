@@ -1,0 +1,6 @@
+This is a normal info line.
+Warning: Disk space low.
+ERROR: Unable to connect to server.
+Just another general line.
+warn: CPU usage high.
+FAIL: this line should trigger error logging

@@ -1,0 +1,11 @@
+nodes:
+  - tag: start
+    type: processors.start.get_processor
+  - tag: error
+    type: processors.filters.get_error_processor
+  - tag: warn
+    type: processors.filters.get_warn_processor
+  - tag: general
+    type: processors.formatters.get_snakecase_processor
+  - tag: end
+    type: processors.output.get_terminal_processor
