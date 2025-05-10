@@ -16,13 +16,14 @@ This project implements a configurable DAG-based streaming line processor for lo
 ```
 
 abstraction-level-5/
+├── __init__.py
 ├── main.py                # CLI entry point
 ├── cli.py                 # CLI argument parsing
-├── dag\_engine.py          # DAG execution engine
+├── dag_engine.py          # DAG execution engine
 ├── pipeline.yaml          # DAG and routing configuration
-├── processor\_types.py     # Processor interface
+├── processor_types.py     # Processor interface
 ├── processors/            # Modular processors
-│   ├── **init**.py
+│   ├── __init__.py
 │   ├── trim.py
 │   ├── tagging.py
 │   ├── archiver.py
