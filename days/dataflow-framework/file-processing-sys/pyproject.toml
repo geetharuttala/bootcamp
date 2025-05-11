@@ -17,11 +17,16 @@ dependencies = [
 ]
 
 [project.scripts]
-fpsys = "file_processing_sys.cli:app"
+fpsys = "file_processing_sys.cli:app"  # This defines the CLI entry point for the project
 
 [build-system]
 requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+build-backend = "setuptools.build_meta"  # Specifies the build backend to be used
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src"]  # Specifies the location of your source code (src/)
+
+# This section is now required for packaging purposes
+[tool.setuptools]
+package-dir = {"" = "src"}  # Direct setuptools to look inside the 'src' folder for packages
+include-package-data = true  # Make sure non-Python files are included (via MANIFEST.in)

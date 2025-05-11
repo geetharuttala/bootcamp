@@ -2,86 +2,44 @@
 
 **Real-Time File Processing System – Final Wrap-Up**
 
-## Summary of What I Built
-
-* A streaming line processor evolved through 8 levels.
-* The final version is a real-time, folder-watching, web-dashboard-enabled pipeline.
-* It supports both single-file mode and continuous watch mode.
-* It runs reliably, restarts cleanly, and exposes key stats via a FastAPI dashboard.
-
 ---
 
 ## 1. Design Decisions
 
-* Built processors as pluggable components using import paths from YAML configs.
-* Used a DAG to allow flexible routing between processors.
-* Chose FastAPI for the dashboard because it's lightweight and async-friendly.
-* Tracing and metrics stored in shared structures with thread-safe access.
-* Processing system runs in a loop, while dashboard runs in a separate thread.
+* **Modular Processors**: I designed the system with pluggable processors, each specified in a YAML file. This allows easy customization and scalability for new processors.
+* **DAG Routing**: A Directed Acyclic Graph (DAG) approach was used to dynamically route files through different processing steps. This setup offers flexibility for future changes or additions to the pipeline.
+* **FastAPI Dashboard**: FastAPI was chosen for the dashboard because it is lightweight, async-friendly, and easy to set up. It efficiently handles real-time monitoring without much overhead.
+* **Shared Metrics**: I implemented real-time tracing and metrics, stored in thread-safe structures for easy access across different components. This gives insights into processing performance and helps with debugging.
+* **Concurrency**: Processing happens in a loop while the dashboard runs in a separate thread, ensuring that both can operate simultaneously without blocking each other.
 
 ---
 
 ## 2. Tradeoffs
 
-* Did not implement persistent logs or long-term metrics storage (in-memory only).
-* No authentication on the web dashboard.
-* Assumes idempotent file processing — reprocessing on crash is treated as safe.
-* Currently single-threaded for file processing; no parallel processing of multiple files.
+* **In-memory Logging**: I chose to store logs and metrics in memory rather than a database, making the system faster but limiting long-term storage. This could be a problem for large-scale, long-running deployments.
+* **Lack of Authentication**: The web dashboard is open without authentication. While this is acceptable for development, it would need proper access control for production.
+* **Idempotent Processing Assumption**: The system assumes that file reprocessing after crashes is safe. This may not be true in all cases, and more complex file handling could be required.
+* **Single-threaded File Processing**: File processing is currently single-threaded, which limits concurrency. This design simplifies the code but doesn’t scale well for high-volume environments.
 
 ---
 
 ## 3. Scalability
 
-* For large-scale input:
-
-  * Switch to multiprocessing or async for concurrent file handling.
-  * Use persistent queues and databases instead of in-memory dicts.
-  * Offload metrics to Prometheus/Grafana.
-* File-level parallelism would need locking or a distributed queue.
+* **Scaling Up**: If the system were to handle 100x more files, I’d switch to multiprocessing or asynchronous processing to handle files concurrently.
+* **Parallelization**: For true parallelism, I’d introduce a distributed queue system with locking mechanisms to ensure thread safety during file processing. This would allow the system to process files in parallel without conflicts.
 
 ---
 
 ## 4. Extensibility & Security
 
-* To make this production-ready:
+* **Production Readiness**: To make this system ready for real users, I'd add:
 
-  * Add file upload via the FastAPI UI or endpoint (with size/type validation).
-  * Secure the API with basic auth or token headers.
-  * Add retry/backoff for transient failures.
-  * Introduce alerting (e.g., via Better Uptime) for system failures.
+  * Validation for file uploads (size, type, etc.)
+  * Authentication for the dashboard (e.g., token-based authentication)
+  * Retry logic to handle intermittent failures
+* **Security Measures**: I’d secure the system by:
 
----
+  * Encrypting sensitive files during processing and storage
+  * Implementing access control for the web dashboard and API
+  * Adding monitoring and alerting tools to catch potential failures
 
-## Running the System
-
-### Local Run
-
-```bash
-python main.py --input sample.txt          # Single-file mode
-python main.py --watch                     # Continuous folder monitor mode
-```
-
-### Docker
-
-```bash
-make build-docker
-make run
-```
-
-### FastAPI Dashboard
-
-* Visit: `http://localhost:8000/stats` → live processor metrics
-* Visit: `http://localhost:8000/trace` → recent line traces
-* Visit: `http://localhost:8000/errors` → recent errors
-* Visit: `http://localhost:8000/errors` → file state
-
----
-
-## Reflection
-
-* This project helped me think more like an operator, not just a developer.
-* Adding observability really changed how I understood the runtime behavior.
-* I learned how to manage file lifecycles, build safe restart mechanisms, and expose system internals in real time.
-* It feels like a solid simulation of real-world data engineering workflows.
-
----

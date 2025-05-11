@@ -190,10 +190,8 @@ file-processing-sys/
 ├── README.md
 ├── requirements.txt
 ├── pyproject.toml
-├── setup.py
 ├── docker-compose.yml
 ├── Makefile
-├── Dockerfile
-└── MANIFEST.in
+└── Dockerfile
 ```
 
