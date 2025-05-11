@@ -1,6 +1,6 @@
-from processors import filters, formatters, output, start
-from utils.tracing import trace_store
-from utils.metrics import metrics_store
+from app.processors import filters, formatters, output, start
+from app.utils.tracing import trace_store
+from app.utils.metrics import metrics_store
 from typing import Iterator
 import yaml
 

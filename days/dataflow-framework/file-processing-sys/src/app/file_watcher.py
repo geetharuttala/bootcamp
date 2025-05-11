@@ -3,7 +3,7 @@ import shutil
 import time
 from pathlib import Path
 import threading
-from engine.runner import process_file
+from app.engine.runner import process_file
 
 WATCH_DIR = Path("watch_dir")
 UNPROCESSED = WATCH_DIR / "unprocessed"
@@ -19,7 +19,7 @@ def recover_incomplete_files():
             print(f"[RECOVERY] Moving {file.name} back to unprocessed/")
             shutil.move(str(file), UNPROCESSED / file.name)
 
-def monitor_folder():
+def monitor_folder(config_path):
     global current_file
     while True:
         for file in UNPROCESSED.iterdir():
@@ -30,7 +30,7 @@ def monitor_folder():
             print(f"[WATCHER] Processing {processing_path.name}")
             current_file = processing_path.name
             try:
-                process_file(processing_path)
+                process_file(processing_path, config_path)
                 shutil.move(str(processing_path), PROCESSED / processing_path.name)
                 processed_files.append((processing_path.name, time.time()))
                 if len(processed_files) > 100:
@@ -41,8 +41,8 @@ def monitor_folder():
             current_file = None
         time.sleep(2)
 
-def start_watcher(config=None):
+def start_watcher(config_path):
     for folder in [UNPROCESSED, UNDERPROCESS, PROCESSED]:
         folder.mkdir(parents=True, exist_ok=True)
     recover_incomplete_files()
-    threading.Thread(target=monitor_folder, daemon=True).start()
+    threading.Thread(target=monitor_folder, args=(config_path,), daemon=True).start()

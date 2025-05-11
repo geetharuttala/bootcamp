@@ -1,0 +1,3 @@
+start:ERROR: Something bad happened
+start:INFO: All good
+start:WARNING: Potential issue

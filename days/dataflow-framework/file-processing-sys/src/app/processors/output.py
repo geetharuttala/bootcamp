@@ -1,5 +1,5 @@
 # processors/output.py
-from utils.metrics import metrics_store
+from app.utils.metrics import metrics_store
 from typing import Iterator, Tuple
 
 def process(lines: Iterator[Tuple[str, str]], current_tag: str) -> Iterator[Tuple[str, str]]:
