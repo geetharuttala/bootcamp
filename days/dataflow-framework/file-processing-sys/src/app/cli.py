@@ -15,6 +15,8 @@ def run(
     watch: bool = typer.Option(False, help="Enable folder watch mode"),
 ):
     if watch:
+        print("[MAIN] Running in folder watch mode.")
+        print("[MAIN] Visit your dashboard at: http://geethar.mooo.com:8000/health")
         run_watch(config)
     elif input:
         run_once(input, config, trace)

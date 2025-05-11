@@ -1,173 +1,199 @@
 # Real-Time File Processing System
 
-This project implements a dynamic, observable, fault-tolerant file processing pipeline using FastAPI, a plugin-based engine, and streaming abstractions. It supports both one-shot and continuous file processing modes.
-
-## Features
-
-- Dual execution modes: single file or watch directory
-- Modular processing pipeline with YAML-based configuration
-- FastAPI-based monitoring and dashboard
-- Docker support
-- Package build and publishing support
-- Real-time file drop handling
-- Tag-based routing and stateful processing
+This project implements a dynamic, observable, fault-tolerant file processing system that supports both **single-file** and **folder-watch** modes. It is configurable, modular, and built using a plugin-based architecture.
 
 ---
 
 ## Installation
 
-### Prerequisites
-
-- Python 3.10+
-- Docker (optional, for containerized usage)
-- `pip`, `build`, `twine`, etc., for packaging
-
-### Clone and Setup
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/geetharuttala/bootcamp/days/dataflow-framework/file-processing-sys.git
+git clone https://github.com/geetharuttala/bootcamp/tree/main/days/dataflow-framework/file-processing-sys.git
 cd file-processing-sys
+```
+
+### 2. Create Virtual Environment (optional but recommended)
+
+```bash
 python -m venv .venv
 source .venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+```bash
 pip install -r requirements.txt
-````
+```
+
+### 4. Optional: Install in Editable Mode
+
+```bash
+pip install -e .
+```
 
 ---
 
-## Execution Modes
+## Running the App
 
-### 1. Watch Mode
+### Local Execution (with Makefile)
 
-Continuously monitors the `watch_dir/unprocessed/` folder for incoming files.
+#### Folder Watch Mode
 
 ```bash
 make run
 ```
 
-Or directly:
+#### Single File Mode
 
 ```bash
-python main.py --watch
+make run-file FILE=input.txt
 ```
 
-### 2. Single File Mode
+### Docker Execution
 
-Processes a single file and exits.
-
-```bash
-make run-file FILE=sample.txt
-```
-
-Or directly:
-
-```bash
-python main.py --input sample.txt
-```
-
----
-
-## Sample Input
-
-Place the following content into a file named `sample.txt` inside `watch_dir/unprocessed/`:
-
-```
-start:ERROR: Something bad happened
-start:INFO: All good
-start:WARNING: Potential issue
-```
-
----
-
-## Sample Output
-
-After processing, output may look like:
-
-```
-filter: start:ERROR: Something bad happened
-format: [ERROR] Something bad happened
-output: Logged to system
-```
-
-Processed files are moved to:
-
-* `watch_dir/processed/` (success)
-* `watch_dir/failed/` (if errors occur)
-
----
-
-## FastAPI Dashboard
-
-When running in `--watch` mode, a FastAPI server starts at:
-
-```
-http://localhost:8000
-```
-
-### Available Endpoints
-
-| Endpoint  | Description                        |
-| --------- | ---------------------------------- |
-| `/`       | Dashboard homepage                 |
-| `/stats`  | Metrics and statistics             |
-| `/health` | Health check for uptime monitoring |
-| `/files`  | Processed file history             |
-| `/trace`  | Full processing traces             |
-| `/errors` | Error logs                         |
-
----
-
-## Docker Usage
-
-### Build Image
+#### Build Docker Image
 
 ```bash
 make docker-build
 ```
 
-### Run Container
+#### Run Docker Container
 
 ```bash
 make docker-run
 ```
 
-This mounts the local `watch_dir/` into the container for real-time processing.
+### Docker Compose (Recommended)
 
----
-
-## Package Build and Publish
-
-To build and upload your package to PyPI or TestPyPI:
+#### Start in Detached Mode
 
 ```bash
-make publish
+make docker-compose-up
 ```
 
-Make sure your `pyproject.toml` is correctly configured.
+Logs will stream automatically to the terminal. Visit:
+
+* [http://localhost:8000](http://localhost:8000)
+* [http://localhost:8000/health](http://localhost:8000/health)
+
+#### Stop the Container
+
+```bash
+make docker-compose-down
+```
 
 ---
 
-## Uptime Monitoring
+## Commands Summary
 
-To monitor your system externally:
-
-1. Deploy it on a server (e.g., a GCP VM or AWS EC2).
-2. Use a free uptime monitoring service like [Better Uptime](https://betteruptime.com).
-3. Point it to the `/health` endpoint (e.g., `http://yourdomain.com:8000/health`).
-4. Configure alerts if the service is unavailable.
-
----
-
-## Development and Maintenance
-
-* All core functionality is structured and modular.
-* New processors can be added dynamically by editing `pipeline.yaml` and implementing corresponding Python modules.
-* Logging and trace support are built-in for observability.
+| Command                    | Description                              |
+| -------------------------- | ---------------------------------------- |
+| `make run`                 | Runs in watch mode (local)               |
+| `make run-file FILE=x`     | Runs on a single file                    |
+| `make docker-build`        | Builds the Docker image                  |
+| `make docker-run`          | Runs the container manually              |
+| `make docker-compose-up`   | Runs container using docker-compose      |
+| `make docker-compose-down` | Stops the docker-compose service         |
+| `make build-pkg`           | Builds a Python package                  |
+| `make publish-pkg`         | Publishes package to PyPI                |
+| `make clean`               | Cleans build artifacts and `__pycache__` |
 
 ---
 
-## License
+## Manual CLI Usage
 
-MIT License. See `LICENSE` file for details.
+### Folder Watch Mode
 
+```bash
+python src/app/cli.py --watch --config src/app/config/pipeline.yaml
+```
 
+### Single File Mode
+
+```bash
+python src/app/cli.py --input test.txt --config src/app/config/pipeline.yaml
+```
+
+---
+
+## FastAPI Endpoints
+
+| Endpoint  | Description                |
+| --------- | -------------------------- |
+| `/files`  | View processed files       |
+| `/stats`  | View processing statistics |
+| `/errors` | View processing errors     |
+| `/trace`  | Trace pipeline steps       |
+| `/health` | Health check               |
+
+Example: [http://geethar.mooo.com:8000/health](http://geethar.mooo.com:8000/health)
+
+---
+
+## Uploading Files
+
+To upload files for processing:
+
+### Use rsync (recommended for speed)
+
+```bash
+rsync -av input.txt geetha@geethar.mooo.com:watch_dir/unprocessed/
+```
+
+You can also manually drop files into the `watch_dir/unprocessed/` folder (inside Docker or locally).
+
+---
+
+## Monitoring
+
+**Better Uptime** or other external monitoring services can ping `/health` to monitor system availability.
+
+Example:
+
+* Monitored URL: `http://geethar.mooo.com:8000/health`
+
+---
+
+## Project Structure
+
+```
+file-processing-sys/
+├── src/
+│   └── app/
+│       ├── __init__.py
+│       ├── main.py
+│       ├── cli.py
+│       ├── file_watcher.py
+│       ├── config/
+│       │   └── pipeline.yaml
+│       ├── core/
+│       │   └── engine.py
+│       ├── engine/
+│       │   └── runner.py
+│       ├── processors/
+│       │   ├── __init__.py
+│       │   ├── filters.py
+│       │   ├── formatters.py
+│       │   ├── output.py
+│       │   └── start.py
+│       ├── dashboard/
+│       │   ├── __init__.py
+│       │   └── server.py
+│       ├── utils/
+│       │   ├── metrics.py
+│       │   └── tracing.py
+│       └── watch_dir/
+│           ├── unprocessed/
+│           ├── underprocess/
+│           └── processed/
+├── README.md
+├── requirements.txt
+├── pyproject.toml
+├── setup.py
+├── docker-compose.yml
+├── Makefile
+├── Dockerfile
+└── MANIFEST.in
+```
 

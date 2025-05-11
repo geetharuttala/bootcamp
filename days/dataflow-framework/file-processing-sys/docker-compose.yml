@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  file-processing-sys:
+    build: .
+    container_name: file-processing-sys
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./watch_dir:/app/watch_dir
+      - ./src/config:/app/src/config
+    command: python /app/src/app/cli.py --watch --config /app/src/config/pipeline.yaml
+    restart: always  # Ensures the container restarts if it crashes
+    tty: true         # Allocate a pseudo-TTY for interactive log output
+    stdin_open: true  # Keep the container's stdin open for logs
