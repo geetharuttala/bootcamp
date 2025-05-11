@@ -1,0 +1,4 @@
+start:This is a normal line
+start:ERROR: Something bad happened
+start:All systems operational
+start:WARNING: Disk space low

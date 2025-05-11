@@ -1,0 +1,3 @@
+start:This is a normal line
+start:ERROR: Something bad happened
+start:WARNING: Disk space low
