@@ -5,6 +5,12 @@ __pycache__/
 
 # Virtual environment
 .venv/
+days/dataflow-framework/abstraction-level-6/.venv
+days/dataflow-framework/file-processing-sys/dist
+days/dataflow-framework/file-processing-sys/src/file_processing_sys.egg-info
+days/dataflow-framework/file-processing-sys/images
+days/dataflow-framework/file-processing-sys/test.txt
+days/day5
 
 # Distribution / packaging
 build/
