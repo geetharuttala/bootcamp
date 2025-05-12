@@ -5,4 +5,4 @@ networkx
 fastapi
 uvicorn
 watchdog
-
+nest-asyncio
