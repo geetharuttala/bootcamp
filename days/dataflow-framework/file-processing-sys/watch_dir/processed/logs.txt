@@ -1,0 +1,8 @@
+2025-05-12 09:58:32,123 INFO  auth      User login attempt: user1
+2025-05-12 09:58:32,456 WARN  auth      Failed login: user1
+2025-05-12 09:59:00,100 INFO  server    Server started on port 8080
+2025-05-12 10:01:45,789 ERROR database  Connection timeout on query
+2025-05-12 10:02:12,301 INFO  user      Profile updated: user1
+2025-05-12 10:03:20,405 DEBUG cache     Cache miss for key: dashboard
+2025-05-12 10:04:12,512 ERROR api       External API failed: 503 Service Unavailable
+2025-05-12 10:05:33,932 INFO  auth      User logout: user1

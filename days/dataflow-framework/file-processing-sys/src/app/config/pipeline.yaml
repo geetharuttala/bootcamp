@@ -1,10 +1,29 @@
+# Example pipeline.yaml configuration
 start:
-  next: filter
+ - filter
+ - format
+ - output
 
-filter:
-  next: format
 
-format:
-  next: output
+error:
+ - filter
+ - output
 
-output: {}
+
+warn:
+ - filter
+ - output
+
+
+general:
+ - output
+
+
+# You can add more complex configurations like:
+# start:
+#   next:
+#     - filter
+#     - format
+#     - output
+
+
