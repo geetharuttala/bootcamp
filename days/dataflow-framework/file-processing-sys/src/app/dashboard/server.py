@@ -1,9 +1,14 @@
 # Fixed version of app/dashboard/server.py
 
-import asyncio
+import time
 from fastapi import FastAPI, status, Response
 from uvicorn import Config, Server
 from pathlib import Path
+import asyncio
+import nest_asyncio
+
+# Apply nest_asyncio to allow nested event loops
+nest_asyncio.apply()
 
 WATCH_DIR = Path("watch_dir")
 
@@ -42,7 +47,8 @@ def start_dashboard(metrics_store, trace_store):
                     status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                     content="Watch directory not found"
                 )
-            return {"status": "ok", "timestamp": asyncio.get_event_loop().time()}
+            # Use time.time() instead of asyncio.get_event_loop().time()
+            return {"status": "ok", "timestamp": time.time()}
         except Exception as e:
             return Response(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
