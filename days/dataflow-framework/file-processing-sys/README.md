@@ -155,6 +155,17 @@ Example:
 
 ---
 
+## Sample Input(test.txt)
+
+```bash
+2025-05-12 10:04:12,512 ERROR api       External API failed: 503 Service Unavailable
+2025-05-12 10:05:33,932 INFO  auth      User logout: user1
+2025-05-12 09:58:32,456 WARN  auth      Failed login: user1
+```
+
+## Sample Output
+
+
 ## Project Structure
 
 ```

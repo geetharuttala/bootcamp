@@ -1,29 +1,28 @@
-# Example pipeline.yaml configuration
-start:
- - filter
- - format
- - output
+# State-based routing pipeline configuration
+nodes:
+  - tag: start
+    type: processors.start.tag_lines
+    next:
+      error: error_processor
+      warn: warn_processor
+      general: general_processor
 
+  - tag: error_processor
+    type: processors.filters.only_error
+    next: output_processor
 
-error:
- - filter
- - output
+  - tag: warn_processor
+    type: processors.filters.only_warn
+    next: output_processor
 
+  - tag: general_processor
+    type: processors.formatters.snakecase
+    next: output_processor
 
-warn:
- - filter
- - output
+  - tag: output_processor
+    type: processors.output.terminal
+    next: end
 
-
-general:
- - output
-
-
-# You can add more complex configurations like:
-# start:
-#   next:
-#     - filter
-#     - format
-#     - output
-
-
+  # Terminal state - no next transitions
+  - tag: end
+    type: processors.output.finalize

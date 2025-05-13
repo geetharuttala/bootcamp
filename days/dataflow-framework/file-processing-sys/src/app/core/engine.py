@@ -1,124 +1,157 @@
-# Fixed version of app/core/engine.py
+# Fixed version of app/core/engine.py with state-based routing
 
 from app.processors import filters, formatters, output, start
 from app.utils.tracing import trace_store
 from app.utils.metrics import metrics_store
-from typing import Iterator, List, Tuple
+from typing import Dict, List, Tuple, Optional
 import yaml
-
-PROCESSOR_MAP = {
-    "start": start.process,
-    "filter": filters.process,
-    "format": formatters.process,
-    "output": output.process,
-}
+import importlib
 
 
 class ProcessingEngine:
     def __init__(self, input_file: str, config_file: str, trace: bool = False):
         self.input_file = input_file
         self.trace = trace
-        self.pipeline = self.load_pipeline(config_file)
+        self.nodes, self.processors = self.load_pipeline(config_file)
         self.trace_data = []
 
+    def load_processor_function(self, processor_type: str):
+        """Dynamically load processor function from a string path."""
+        try:
+            # Split the path into module and function
+            module_path, function_name = processor_type.rsplit('.', 1)
+
+            # Import the module
+            module = importlib.import_module(f"app.{module_path}")
+
+            # Get the function
+            return getattr(module, function_name)
+        except (ImportError, AttributeError) as e:
+            print(f"[ENGINE ERROR] Failed to load processor {processor_type}: {e}")
+            # Return a dummy processor as fallback
+            return lambda lines, tag: []
+
     def load_pipeline(self, config_file: str):
+        """Load pipeline configuration from YAML file."""
         with open(config_file) as f:
-            raw_pipeline = yaml.safe_load(f)
+            config = yaml.safe_load(f)
 
-        # Normalize the pipeline to always be: tag -> list of steps
-        pipeline = {}
-        for tag, config in raw_pipeline.items():
-            if isinstance(config, dict) and "next" in config:
-                next_step = config["next"]
-                pipeline[tag] = [next_step] if isinstance(next_step, str) else next_step
-            elif isinstance(config, list):
-                pipeline[tag] = config
-            else:
-                pipeline[tag] = []
+        nodes = {}
+        processors = {}
 
-        return pipeline
+        # Process each node in the configuration
+        for node in config.get('nodes', []):
+            tag = node.get('tag')
+            processor_type = node.get('type')
+            next_states = node.get('next', {})
+
+            # Store node configuration
+            nodes[tag] = {
+                'type': processor_type,
+                'next': next_states
+            }
+
+            # Load processor function
+            if processor_type:
+                processors[tag] = self.load_processor_function(processor_type)
+
+        return nodes, processors
 
     def run(self):
+        """Run the processing pipeline on the input file."""
         print(f"[ENGINE] Processing file: {self.input_file}")
+
         with open(self.input_file) as f:
-            lines = (line.strip() for line in f)
-            tagged_lines = [("start", line) for line in lines if line.strip()]  # Skip empty lines
+            lines = [line.strip() for line in f if line.strip()]
 
-            # Count initial lines and record metrics
-            tagged_lines = list(tagged_lines)  # Convert to list first
-            initial_count = len(tagged_lines)
-            metrics_store.increment("total_lines", initial_count)  # Pass count as argument
+        # Start with all lines in the 'start' state
+        state_buckets = {'start': [(None, line) for line in lines]}
+        processed_count = 0
+        metrics_store.increment("total_lines", len(lines))
 
-            # Track already processed lines by tag to avoid duplicates
-            processed_tags = set()
+        # Process until no lines left or we reach max iterations
+        max_iterations = 100  # Safety limit
+        iteration = 0
 
-            for tag, processor_steps in self.pipeline.items():
-                # Skip if we've already processed this tag in this run
-                if tag in processed_tags:
+        while state_buckets and iteration < max_iterations:
+            iteration += 1
+            next_state_buckets = {}
+
+            # Process each state bucket
+            for current_state, lines_in_state in state_buckets.items():
+                if not lines_in_state:
                     continue
 
-                # Convert to list because we'll need to iterate multiple times
-                matching_lines = [(t, l) for t, l in tagged_lines if t == tag]
-                if matching_lines:
-                    metrics_store.increment(f"tag_{tag}", len(matching_lines))
-                    print(f"[ENGINE] Found {len(matching_lines)} lines with tag '{tag}'")
+                # Skip terminal states
+                if current_state == 'end' or current_state not in self.nodes:
+                    if current_state == 'end':
+                        processed_count += len(lines_in_state)
+                    continue
 
-                for step in processor_steps:
-                    func = PROCESSOR_MAP[step]
-                    print(f"[ENGINE] Applying {step} to tag: {tag}")
+                # Get processor for this state
+                processor = self.processors.get(current_state)
+                if not processor:
+                    print(f"[ENGINE WARNING] No processor found for state: {current_state}")
+                    continue
 
-                    # Process the lines
-                    processed_lines = list(func(matching_lines, tag))
+                print(f"[ENGINE] Processing {len(lines_in_state)} lines in state '{current_state}'")
+                metrics_store.increment(f"state_{current_state}", len(lines_in_state))
 
-                    # Count processed lines for metrics
-                    if processed_lines:
-                        metrics_store.increment(f"processed_{step}", len(processed_lines))
+                # Process the lines
+                results = list(processor(lines_in_state, current_state))
+                metrics_store.increment(f"processed_{current_state}", len(results))
 
-                        # Update the main list with the processed lines
-                        # First, remove lines with the current tag
-                        tagged_lines = [(t, l) for t, l in tagged_lines if t != tag]
-                        # Then add the processed lines
-                        tagged_lines.extend(processed_lines)
+                # Add trace data if enabled
+                if self.trace:
+                    self.trace_data.append({
+                        "step": current_state,
+                        "input_count": len(lines_in_state),
+                        "output_count": len(results)
+                    })
 
-                    # Add trace data for each step - only once
-                    if self.trace:
-                        trace_entry = {
-                            "step": step,
-                            "tag": tag,
-                            "input_count": len(matching_lines),
-                            "output_count": len(processed_lines)
-                        }
-                        self.trace_data.append(trace_entry)
+                # Route results to next states based on tags
+                node_config = self.nodes[current_state]
+                next_state_map = node_config.get('next', {})
 
-                    # Log any error lines - but only once for each unique error
-                    error_msgs = set()
-                    for t, l in processed_lines:
-                        if "ERROR" in l and l not in error_msgs:
-                            metrics_store.increment("error_count")
-                            metrics_store.log_error("file_processor", f"Error in line: {l}")
-                            error_msgs.add(l)
-                        elif "WARN" in l:
-                            metrics_store.increment("warning_count")
+                # Handle different types of next state configurations
+                for tag, line in results:
+                    if isinstance(next_state_map, dict):
+                        # Map-based routing: use the tag to determine next state
+                        next_state = next_state_map.get(tag, 'end')
+                    elif isinstance(next_state_map, str):
+                        # String-based routing: always go to the same next state
+                        next_state = next_state_map
+                    else:
+                        # Default to end state if no valid routing
+                        next_state = 'end'
 
-                    # Add individual traces - but avoid calling for every line
-                    trace_store.add_traces(tag, processed_lines)
+                    # Add to next state bucket
+                    if next_state not in next_state_buckets:
+                        next_state_buckets[next_state] = []
 
-                    print(f"[DEBUG] After step '{step}' on tag '{tag}':")
-                    for i, (t, l) in enumerate(tagged_lines[:5]):  # Show only first 5 for debug
-                        print(f"  {t}: {l}")
-                    if len(tagged_lines) > 5:
-                        print(f"  ... and {len(tagged_lines) - 5} more lines")
+                    next_state_buckets[next_state].append((tag, line))
 
-                # Mark this tag as processed to prevent duplicate processing
-                processed_tags.add(tag)
+                    # Count errors and warnings
+                    if "ERROR" in line:
+                        metrics_store.increment("error_count")
+                        metrics_store.log_error("file_processor", f"Error in line: {line}")
+                    elif "WARN" in line:
+                        metrics_store.increment("warning_count")
 
-        # Store final trace data - only once per file
+                    # Add traces
+                    trace_store.add_trace(tag, line)
+
+            # Move to next iteration with updated state buckets
+            state_buckets = next_state_buckets
+
+            # Debug output
+            print(f"[ENGINE] After iteration {iteration}, states: {', '.join(state_buckets.keys())}")
+
+        # Store final trace data
         if self.trace and self.trace_data:
             print(f"[ENGINE] Storing trace data from {self.input_file}...")
             trace_store.store(self.input_file, self.trace_data)
 
         # Calculate completion metrics
-        final_count = len(tagged_lines)
         metrics_store.increment("processed_files")
-        if final_count > 0:
-            metrics_store.increment("successfully_processed")
+        metrics_store.increment("successfully_processed", processed_count)
