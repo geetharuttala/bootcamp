@@ -1,0 +1,4 @@
+
+View my MkDocs-powered site for Password Strength Checker documentation:
+
+https://geethar.mooo.com/docs/

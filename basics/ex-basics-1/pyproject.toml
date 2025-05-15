@@ -1,0 +1,11 @@
+[project]
+name = "geetha-hello"
+version = "0.1.0"
+description = "A simple hello package for demonstration"
+authors = [{ name = "Geetha", email = "geetharuttala0106@gmail.com" }]
+readme = "README.md"
+requires-python = ">=3.8"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

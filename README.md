@@ -7,9 +7,20 @@ This repository contains daily exercises and learnings from the bootcamp, coveri
 
 ## Days
 
-* [Day 0 – Server Setup & Python Module Packaging](./days/day0/README.md)
-* [Day 1 – Developer Documentation: Tools & Best Practices](./days/day1/README.md)
-* [Day 2 – Pythonic Practices, Functional Tools & Packaging](./days/day2/basic-drills/README.md)
+* [basics](./basics/README.md)
+* [doctools](./doctools/README.md)
+* [language-drills](./language-drills/basic-drills/README.md)
+* [persistence-drills](./persistence-drills/README.md)
+
+---
+
+## Live Documentation Sites
+
+View my live site:  
+[https://geethar.mooo.com](https://geethar.mooo.com/)
+
+View my MkDocs-powered site for Password Strength Checker documentation:  
+[https://geethar.mooo.com/docs/](https://geethar.mooo.com/docs/)
 
 ---
 
@@ -42,16 +53,6 @@ A modular `say_hello` Python package published to TestPyPI and reused in another
 - Supports YAML-based config (`_config.yaml`) with fallback logic
 - Implements logging for both config loading and message generation
 - Packaged, versioned, and tested through TestPyPI
-
----
-
-## Live Documentation Site
-
-View my live site:  
-[https://geethar.mooo.com](https://geethar.mooo.com/)
-
-View my MkDocs-powered site for Password Strength Checker documentation:  
-[https://geethar.mooo.com/docs/](https://geethar.mooo.com/docs/)
 
 ---
 

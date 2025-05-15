@@ -1,16 +1,30 @@
+.gitignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+.python-version
 
 # Virtual environment
 .venv/
-days/dataflow-framework/abstraction-level-6/.venv
-days/dataflow-framework/file-processing-sys/dist
-days/dataflow-framework/file-processing-sys/src/file_processing_sys.egg-info
-days/dataflow-framework/file-processing-sys/images
-days/dataflow-framework/file-processing-sys/test.txt
-days/day5
+main.py
+basics/src
+basics/pyproject.toml
+dataflow-framework/abstraction-level-6/.venv
+dataflow-framework/file-processing-sys/dist
+dataflow-framework/file-processing-sys/src/file_processing_sys.egg-info
+dataflow-framework/file-processing-sys/test.txt
+dataflow-framework/notthis
+doctools/markdown-essentials/markdown-cheatsheet.md
+doctools/markdown-essentials/readme-authoring.md
+persistence-drills/basic_persistence
+persistence-drills/sqlite
+doctools/mkdocs-site
+figure-captions-extraction
+figurex
+phase-1
+phase-2
 
 # Distribution / packaging
 build/
@@ -38,3 +52,5 @@ htmlcov/
 Thumbs.db
 
 
+/phase-1/
+/phase-2/
