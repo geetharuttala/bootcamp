@@ -333,11 +333,11 @@ MIT
 4. [Make commands](https://asciinema.org/a/b8laxiu1amPNfCHk6hTlbJ5SV)
 
 ## A few screenshots
-1. ![Home page](screenshots/home.png)
-2. ![API authorization](screenshots/api.png)
-3. ![Results](screenshots/results.png)
-4. ![Papers list](screenshots/papers.png)
-5. ![Paper details](screenshots/paper_details.png)
+![Home page](screenshots/home.png)
+![API authorization](screenshots/api.png)
+![Results](screenshots/results.png)
+![Papers list](screenshots/papers.png)
+![Paper details](screenshots/paper_details.png)
 
 ## Project Structure
 
