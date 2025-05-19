@@ -19,6 +19,10 @@
 ## Setup
 
 1. Clone the repository
+   ```bash
+   git clone https://github.com/geetharuttala/bootcamp.git
+   cd bootcamp/figure-captions-extraction
+   ```
 2. Install dependencies:
 
    ```bash
@@ -328,6 +332,12 @@ MIT
 3. [Querying](https://asciinema.org/a/Wy4eJ8YBIzRh0bshAI4uddTV1)
 4. [Make commands](https://asciinema.org/a/b8laxiu1amPNfCHk6hTlbJ5SV)
 
+## A few screenshots
+1. [Home page](screenshots/home.png)
+2. [API authorization](screenshots/api.png)
+3. [Results](screenshots/results.png)
+4. [Papers list](screenshots/papers.png)
+5. [Paper details](screenshots/paper_details.png)
 
 ## Project Structure
 
